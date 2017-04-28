@@ -1,1 +1,1 @@
-# phpBB---Name-Suggestions
+# phpBB - Name Suggestions

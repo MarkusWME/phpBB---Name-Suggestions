@@ -1,0 +1,63 @@
+<!-- INCLUDE overall_header.html -->
+<h1>{L_ACP_PCGF_NAMESUGGESTIONS_EDIT}</h1>
+<p>{L_ACP_PCGF_NAMESUGGESTIONS_EXPLAIN}</p>
+<form id="acp-pcgf-namesuggestions-settings" method="post" action="{U_ACTION}">
+    <fieldset>
+        <legend>{L_ACP_PCGF_NAMESUGGESTIONS_SETTINGS}</legend>
+        <input type="hidden" name="action" value="save"/>
+        <dl>
+            <dt>
+                <label for="namesuggestion-user-count">{L_ACP_PCGF_NAMESUGGESTIONS_USER_COUNT}{L_COLON}</label>
+                <br/>
+                <span>{L_ACP_PCGF_NAMESUGGESTIONS_USER_COUNT_EXPLAIN}</span>
+            </dt>
+            <dd>
+                <input id="namesuggestion-user-count" name="namesuggestion-user-count" type="number" value="{PCGF_NAMESUGGESTIONS_USER_COUNT}" min="0"/>
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                <label for="namesuggestions-avatar-image-size">{L_ACP_PCGF_NAMESUGGESTIONS_AVATAR_IMAGE_SIZE}{L_COLON}</label>
+                <br/>
+                <span>{L_ACP_PCGF_NAMESUGGESTIONS_AVATAR_IMAGE_SIZE_EXPLAIN}</span>
+            </dt>
+            <dd>
+                <input id="namesuggestions-avatar-image-size" name="namesuggestions-avatar-image-size" type="number" value="{PCGF_NAMESUGGESTIONS_AVATAR_IMAGE_SIZE}" min="0"/>
+                <label for="namesuggestions-avatar-image-size">{L_PIXEL}</label>
+            </dd>
+        </dl>
+        <p class="submit-buttons">
+            <input class="button1" type="submit" id="submit-save" name="submit" value="{L_SUBMIT}"/>&nbsp;
+            <input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}"/>
+            {S_FORM_TOKEN}
+        </p>
+    </fieldset>
+</form>
+<fieldset>
+    <legend>{L_ACP_PCGF_NAMESUGGESTIONS_EDIT}</legend>
+    <span>{L_ACP_PCGF_NAMESUGGESTIONS_EVENTS}{L_COLON}</span>
+    <table class="table1">
+        <!-- IF PCGF_NAMESUGGESTIONS -->
+            <colgroup>
+                <col class="row1"/>
+                <col class="row2"/>
+            </colgroup>
+            <tbody>
+                <!-- BEGIN namesuggestion_event_list -->
+
+                <!-- END namesuggestion_event_list -->
+            </tbody>
+        <!-- ELSE -->
+            <tr>
+                <td>{L_ACP_PCGF_NAMESUGGESTIONS_NO_EVENTS}</td>
+            </tr>
+        <!-- ENDIF -->
+    </table>
+</fieldset>
+<form id="acp-pcgf-namesuggestions-add" method="post" action="{ADD_ACTION}">
+    <fieldset class="quick">
+        <input class="button2" type="submit" id="submit-add" name="submit" value="{L_ACP_PCGF_NAMESUGGESTIONS_ADD}"/>
+        {S_FORM_TOKEN}
+    </fieldset>
+</form>
+<!-- INCLUDE overall_footer.html -->

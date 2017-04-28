@@ -1,0 +1,8 @@
+services:
+    pcgf.namesuggestions.listener:
+        class: pcgf\namesuggestions\event\listener
+        arguments:
+            - '@dbal.conn'
+            - '@config'
+        tags:
+            - { name: event.listener }
