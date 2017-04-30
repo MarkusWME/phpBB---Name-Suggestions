@@ -36,15 +36,34 @@
 <fieldset>
     <legend>{L_ACP_PCGF_NAMESUGGESTIONS_EDIT}</legend>
     <span>{L_ACP_PCGF_NAMESUGGESTIONS_EVENTS}{L_COLON}</span>
+    <br/><br/>
     <table class="table1">
         <!-- IF PCGF_NAMESUGGESTIONS -->
-            <colgroup>
-                <col class="row1"/>
-                <col class="row2"/>
-            </colgroup>
+            <thead>
+                <tr>
+                    <th>{L_ACP_PCGF_NAMESUGGESTIONS_STATUS}</th>
+                    <th>{L_ACP_PCGF_NAMESUGGESTIONS_EVENT_NAME}</th>
+                    <th>{L_ACP_PCGF_NAMESUGGESTIONS_DESCRIPTION}</th>
+                    <th>{L_ACP_PCGF_NAMESUGGESTIONS_ACTIONS}</th>
+                </tr>
+            </thead>
             <tbody>
                 <!-- BEGIN namesuggestion_event_list -->
-
+                    <tr>
+                        <td class="actions">
+                            <!-- IF namesuggestion_event_list.ENABLED -->
+                                <img src="images/file_up_to_date.gif" alt="{L_ENABLED}" title="{L_ENABLED}"/>
+                            <!-- ELSE -->
+                                <img src="images/file_not_modified.gif" alt="{L_DISABLED}" title="{L_DISABLED}"/>
+                            <!-- ENDIF -->
+                        </td>
+                        <td>{namesuggestion_event_list.EVENT}</td>
+                        <td>{namesuggestion_event_list.DESCRIPTION}</td>
+                        <td class="actions">
+                            <a href="{ADD_ACTION}&amp;event={namesuggestion_event_list.EVENT}"><img src="images/icon_edit.gif" alt="{L_EDIT}" title="{L_EDIT}"/></a>
+                            <a href="{U_ACTION}&amp;action=delete&amp;event={namesuggestion_event_list.EVENT}"><img src="images/icon_delete.gif" alt="{L_DELETE}" title="{L_DELETE}"/></a>
+                        </td>
+                    </tr>
                 <!-- END namesuggestion_event_list -->
             </tbody>
         <!-- ELSE -->
@@ -57,7 +76,6 @@
 <form id="acp-pcgf-namesuggestions-add" method="post" action="{ADD_ACTION}">
     <fieldset class="quick">
         <input class="button2" type="submit" id="submit-add" name="submit" value="{L_ACP_PCGF_NAMESUGGESTIONS_ADD}"/>
-        {S_FORM_TOKEN}
     </fieldset>
 </form>
 <!-- INCLUDE overall_footer.html -->

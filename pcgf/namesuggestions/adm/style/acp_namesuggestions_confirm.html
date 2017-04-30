@@ -1,0 +1,16 @@
+<!-- INCLUDE overall_header.html -->
+<h1>{L_ACP_PCGF_NAMESUGGESTIONS_EDIT}</h1>
+<form id="acp-pcgf-namesuggestions-settings" method="post" action="{U_ACTION}">
+    <fieldset>
+        <legend>{L_ACP_PCGF_NAMESUGGESTIONS_CONFIRM_DELETION}</legend>
+        <input type="hidden" name="action" value="delete"/>
+        <input type="hidden" name="event" value="{EVENT}"/>
+        <p>{ACP_PCGF_NAMESUGGESTIONS_CONFIRM_DELETION_TEXT}</p>
+        <p class="submit-buttons">
+            <input class="button1" type="submit" id="submit" name="submit" value="{L_YES}"/>&nbsp;
+            <input class="button2" type="submit" id="reset" name="submit" value="{L_NO}"/>
+            {S_FORM_TOKEN}
+        </p>
+    </fieldset>
+</form>
+<!-- INCLUDE overall_footer.html -->

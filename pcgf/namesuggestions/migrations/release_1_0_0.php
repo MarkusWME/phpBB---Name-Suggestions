@@ -78,6 +78,7 @@ class release_1_0_0 extends migration
                     'module_mode'     => 'edit',
                 ),
             )),
+            array('custom', array(array($this, 'insert_default_events'))),
         );
     }
 
@@ -97,6 +98,7 @@ class release_1_0_0 extends migration
                     'COLUMNS'     => array(
                         'event_name'     => array('VCHAR_UNI', ''),
                         'input_selector' => array('VCHAR_UNI', ''),
+                        'description'    => array('VCHAR_UNI', ''),
                         'suggest_users'  => array('BOOL', 1),
                         'suggest_groups' => array('BOOL', 0),
                         'enabled'        => array('BOOL', 1),
@@ -122,5 +124,27 @@ class release_1_0_0 extends migration
                 $this->table_prefix . self::NAMESUGGESTIONS_EVENTS_TABLE,
             ),
         );
+    }
+
+    /**
+     * Function that inserts the default events
+     *
+     * @access public
+     * @since  1.0.0
+     */
+    public function insert_default_events()
+    {
+        global $db, $table_prefix;
+        $insert_data = array(
+            array(
+                'event_name'     => 'core.ucp_pm_compose_modify_data',
+                'input_selector' => '#username_list',
+                'description'    => 'PM Name Suggestions',
+                'suggest_users'  => 1,
+                'suggest_groups' => 0,
+                'enabled'        => 1,
+            ),
+        );
+        $db->sql_multi_insert($table_prefix . self::NAMESUGGESTIONS_EVENTS_TABLE, $insert_data);
     }
 }
