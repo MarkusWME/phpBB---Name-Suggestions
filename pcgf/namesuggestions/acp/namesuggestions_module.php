@@ -22,6 +22,15 @@ class namesuggestions_module
     /** @var object $u_action Action object */
     public $u_action;
 
+    /**
+     * Main function of the module
+     *
+     * @access public
+     * @since  1.0.0
+     *
+     * @param string $id   The module id
+     * @param string $mode The mode the module is being called with
+     */
     public function main($id, $mode)
     {
         global $config, $db, $phpbb_admin_path, $phpEx, $request, $table_prefix, $template, $user;
