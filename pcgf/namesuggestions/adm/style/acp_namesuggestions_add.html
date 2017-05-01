@@ -1,3 +1,85 @@
 <!-- INCLUDE overall_header.html -->
-<h1>{L_ACP_PCGF_NAMESUGGESTIONS_ADD}</h1>
+<!-- IF EVENT == ""  -->
+    <h1>{L_ACP_PCGF_NAMESUGGESTIONS_ADD}</h1>
+    <p>{L_ACP_PCGF_NAMESUGGESTIONS_ADD_DESCRIPTION}</p>
+<!-- ELSE -->
+    <h1>{L_ACP_PCGF_NAMESUGGESTIONS_EDIT}</h1>
+    <p>{L_ACP_PCGF_NAMESUGGESTIONS_EDIT_EXPLAIN}</p>
+<!-- ENDIF -->
+<form id="acp-pcgf-namesuggestions-add" method="post" action="{U_ACTION}">
+    <input type="hidden" name="event" value="{EVENT}"/>
+    <fieldset>
+        <legend>{L_ACP_PCGF_NAMESUGGESTIONS_SETTINGS}</legend>
+        <dl>
+            <dt>
+                <label for="namesuggestions-event-name">{L_ACP_PCGF_NAMESUGGESTIONS_EVENT_NAME}{L_COLON}</label>
+                <br/>
+                <span>{L_ACP_PCGF_NAMESUGGESTIONS_EVENT_NAME_EXPLAIN}</span>
+            </dt>
+            <dd>
+                <input id="namesuggestions-event-name" name="event-name" type="text" value="{PCGF_NAMESUGGESTIONS_EVENT_NAME}" maxlength="255" size="40"/>
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                <label for="namesuggestions-input-selector">{L_ACP_PCGF_NAMESUGGESTIONS_INPUT_SELECTOR}{L_COLON}</label>
+                <br/>
+                <span>{L_ACP_PCGF_NAMESUGGESTIONS_INPUT_SELECTOR_EXPLAIN}</span>
+            </dt>
+            <dd>
+                <input id="namesuggestions-input-selector" name="input-selector" type="text" value="{PCGF_NAMESUGGESTIONS_INPUT_SELECTOR}" maxlength="255" size="40"/>
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                <label for="namesuggestions-description">{L_ACP_PCGF_NAMESUGGESTIONS_DESCRIPTION}{L_COLON}</label>
+                <br/>
+                <span>{L_ACP_PCGF_NAMESUGGESTIONS_DESCRIPTION_EXPLAIN}</span>
+            </dt>
+            <dd>
+                <input id="namesuggestions-description" name="description" type="text" value="{PCGF_NAMESUGGESTIONS_DESCRIPTION}" maxlength="255" size="60"/>
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                <label>{L_ACP_PCGF_NAMESUGGESTIONS_SUGGEST_USERS}{L_COLON}</label>
+            </dt>
+            <dd>
+                <input id="namesuggestions-suggest-users-yes" name="suggest-users" type="radio" value="1" <!-- IF PCGF_NAMESUGGESTIONS_SUGGEST_USERS --> checked<!-- ENDIF -->/>
+                <label for="namesuggestions-suggest-users-yes">{L_YES}</label>&nbsp;
+                <input id="namesuggestions-suggest-users-no" name="suggest-users" type="radio" value="0" <!-- IF not PCGF_NAMESUGGESTIONS_SUGGEST_USERS --> checked<!-- ENDIF -->/>
+                <label for="namesuggestions-suggest-users-no">{L_NO}</label>&nbsp;
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                <label>{L_ACP_PCGF_NAMESUGGESTIONS_SUGGEST_GROUPS}{L_COLON}</label>
+            </dt>
+            <dd>
+                <input id="namesuggestions-suggest-groups-yes" name="suggest-groups" type="radio" value="1" <!-- IF PCGF_NAMESUGGESTIONS_SUGGEST_GROUPS --> checked<!-- ENDIF -->/>
+                <label for="namesuggestions-suggest-groups-yes">{L_YES}</label>&nbsp;
+                <input id="namesuggestions-suggest-groups-no" name="suggest-groups" type="radio" value="0" <!-- IF not PCGF_NAMESUGGESTIONS_SUGGEST_GROUPS --> checked<!-- ENDIF -->/>
+                <label for="namesuggestions-suggest-groups-no">{L_NO}</label>&nbsp;
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                <label>{L_ENABLED}{L_COLON}</label>
+            </dt>
+            <dd>
+                <input id="namesuggestions-enabled-yes" name="enabled" type="radio" value="1" <!-- IF PCGF_NAMESUGGESTIONS_ENABLED --> checked<!-- ENDIF -->/>
+                <label for="namesuggestions-enabled-yes">{L_YES}</label>&nbsp;
+                <input id="namesuggestions-enabled-no" name="enabled" type="radio" value="0" <!-- IF not PCGF_NAMESUGGESTIONS_ENABLED --> checked<!-- ENDIF -->/>
+                <label for="namesuggestions-enabled-no">{L_NO}</label>&nbsp;
+            </dd>
+        </dl>
+        <br/><br/>
+        {EDIT_ACTION}
+    </fieldset>
+    <p class="submit-buttons">
+        <input class="button1" type="submit" id="submit" name="submit-add" value="{L_SUBMIT}"/>&nbsp;
+        <input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}"/>&nbsp;
+        {S_FORM_TOKEN}
+    </p>
+</form>
 <!-- INCLUDE overall_footer.html -->

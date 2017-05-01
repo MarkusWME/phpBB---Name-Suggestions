@@ -31,12 +31,91 @@ class namesuggestions_module
                 $this->page_title = $user->lang('ACP_PCGF_NAMESUGGESTIONS_ADD');
                 $this->tpl_name = 'acp_namesuggestions_add';
                 add_form_key('pcgf/namesuggestions_add');
+                // Generate back link (links to the edit module)
+                $back_link = '<a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", array(
+                        'i'    => str_replace('\\', '-', $id),
+                        'mode' => 'edit',
+                    )) . '">' . $user->lang('ACP_PCGF_NAMESUGGESTIONS_BACK_TO_EDIT') . '</a>';
+                $event_name = $request->variable('event', '');
+                if ($request->is_set_post('submit-add'))
+                {
+                    if (!check_form_key('pcgf/namesuggestions_add'))
+                    {
+                        trigger_error('FORM_INVALID', E_USER_WARNING);
+                    }
+                    $event_name_new = $request->variable('event-name', '');
+                    $insert_data = array(
+                        'event_name'     => $event_name_new,
+                        'input_selector' => $request->variable('input-selector', ''),
+                        'description'    => $request->variable('description', ''),
+                        'suggest_users'  => $request->variable('suggest-users', 0),
+                        'suggest_groups' => $request->variable('suggest-groups', 0),
+                        'enabled'        => $request->variable('enabled', 0),
+                    );
+                    $query = '';
+                    if ($event_name == '')
+                    {
+                        // Insert a new event
+                        $query = 'INSERT INTO ' . $table_prefix . release_1_0_0::NAMESUGGESTIONS_EVENTS_TABLE . ' ' . $db->sql_build_array('INSERT', $insert_data);
+                    }
+                    else
+                    {
+                        // Update an existing event
+                        $query = 'UPDATE ' . $table_prefix . release_1_0_0::NAMESUGGESTIONS_EVENTS_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $insert_data) . ' WHERE event_name = "' . $db->sql_escape($event_name) . '"';
+                    }
+                    $db->sql_query($query);
+                    if ($db->sql_affectedrows() == 1)
+                    {
+                        if ($event_name == '')
+                        {
+                            // Show add success message
+                            trigger_error($user->lang('ACP_PCGF_NAMESUGGESTIONS_ADD_SUCCESS') . adm_back_link($this->u_action . '&amp;event=' . $event_name_new) . '<br/>' . $back_link, E_USER_NOTICE);
+                        }
+                        else
+                        {
+                            // Show edit success message
+                            trigger_error($user->lang('ACP_PCGF_NAMESUGGESTIONS_EDIT_SUCCESS') . adm_back_link($this->u_action . '&amp;event=' . $event_name_new) . '<br/>' . $back_link, E_USER_NOTICE);
+                        }
+                    }
+                    else
+                    {
+                        // Show action failed message
+                        trigger_error($user->lang('ACP_PCGF_NAMESUGGESTIONS_ACTION_FAILED') . adm_back_link($this->u_action), E_USER_WARNING);
+                    }
+                }
+                $event = false;
+                if ($event_name != '')
+                {
+                    $query = 'SELECT *
+                            FROM ' . $table_prefix . release_1_0_0::NAMESUGGESTIONS_EVENTS_TABLE . '
+                            WHERE event_name = "' . $db->sql_escape($event_name) . '"';
+                    $result = $db->sql_query($query);
+                    $event = $db->sql_fetchrow($result);
+                    $db->sql_freeresult($result);
+                }
+                if ($event)
+                {
+                    // Load the settings of the selected event
+                    $template->assign_vars(array(
+                        'PCGF_NAMESUGGESTIONS_EVENT_NAME'     => $event['event_name'],
+                        'PCGF_NAMESUGGESTIONS_INPUT_SELECTOR' => $event['input_selector'],
+                        'PCGF_NAMESUGGESTIONS_DESCRIPTION'    => $event['description'],
+                        'PCGF_NAMESUGGESTIONS_SUGGEST_USERS'  => $event['suggest_users'],
+                        'PCGF_NAMESUGGESTIONS_SUGGEST_GROUPS' => $event['suggest_groups'],
+                        'PCGF_NAMESUGGESTIONS_ENABLED'        => $event['enabled'],
+                    ));
+                }
+                $template->assign_vars(array(
+                    'EVENT'       => $event_name,
+                    'U_ACTION'    => $this->u_action,
+                    'EDIT_ACTION' => $back_link,
+                ));
             break;
             case 'edit':
                 $this->page_title = $user->lang('ACP_PCGF_NAMESUGGESTIONS_EDIT');
                 $this->tpl_name = 'acp_namesuggestions_edit';
                 add_form_key('pcgf/namesuggestions_edit');
-                $action = $request->variable('action', 'void');
+                $action = $request->variable('action', '');
                 if ($request->is_set_post('submit'))
                 {
                     if (!check_form_key('pcgf/namesuggestions_edit') || !$request->is_set_post('action'))
@@ -46,6 +125,7 @@ class namesuggestions_module
                     switch ($action)
                     {
                         case 'delete':
+                            // Delete the selected event when deletion has been confirmed
                             if ($request->variable('submit', $user->lang('NO')) == $user->lang('YES'))
                             {
                                 $query = 'DELETE FROM ' . $table_prefix . release_1_0_0::NAMESUGGESTIONS_EVENTS_TABLE . ' WHERE event_name = "' . $db->sql_escape($request->variable('event', 'NULL')) . '"';
@@ -57,6 +137,7 @@ class namesuggestions_module
                             }
                         break;
                         case 'save':
+                            // Save the settings
                             $config->set('pcgf_namesuggestions_suggestion_count', $request->variable('namesuggestion-user-count', 5));
                             $config->set('pcgf_namesuggestions_avatar_image_size', $request->variable('namesuggestions-avatar-image-size', 20));
                             trigger_error($user->lang('ACP_PCGF_NAMESUGGESTIONS_SETTINGS_SAVED') . adm_back_link($this->u_action));
@@ -65,6 +146,7 @@ class namesuggestions_module
                 }
                 else if ($action == 'delete')
                 {
+                    // Show confirmation page
                     $this->tpl_name = 'acp_namesuggestions_confirm';
                     $event_name = $request->variable('event', 'NULL');
                     $template->assign_vars(array(
@@ -82,6 +164,7 @@ class namesuggestions_module
                         'mode' => 'add',
                     )),
                 ));
+                // Load defined events
                 $events_defined = false;
                 $query = 'SELECT event_name, description, enabled
                             FROM ' . $table_prefix . release_1_0_0::NAMESUGGESTIONS_EVENTS_TABLE;
@@ -95,6 +178,7 @@ class namesuggestions_module
                         'ENABLED'     => $event['enabled'],
                     ));
                 }
+                $db->sql_freeresult($result);
                 $template->assign_var('PCGF_NAMESUGGESTIONS', $events_defined);
             break;
         }
