@@ -4,5 +4,15 @@ services:
         arguments:
             - '@dbal.conn'
             - '@config'
+            - '@controller.helper'
+            - '@template'
         tags:
             - { name: event.listener }
+    pcgf.namesuggestions.controller:
+        class: pcgf\namesuggestions\controller\controller
+        arguments:
+            - '@request'
+            - '@dbal.conn'
+            - '@user'
+            - '@config'
+            - '%core.root_path%'
