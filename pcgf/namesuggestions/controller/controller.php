@@ -69,10 +69,10 @@ class controller
                 $count = 0;
                 $search = $this->db->sql_escape($search);
                 $query = 'SELECT *
-					FROM ' . USERS_TABLE . '
-					WHERE ' . $this->db->sql_in_set('user_type', array(USER_NORMAL, USER_FOUNDER)) . '
-						AND username_clean ' . $this->db->sql_like_expression($this->db->get_any_char() . $search . $this->db->get_any_char()) . '
-					ORDER BY username_clean ' . $this->db->sql_like_expression($search . $this->db->get_any_char()) . ' DESC, username DESC';
+                            FROM ' . USERS_TABLE . '
+                            WHERE ' . $this->db->sql_in_set('user_type', array(USER_NORMAL, USER_FOUNDER)) . '
+                                AND username_clean ' . $this->db->sql_like_expression($this->db->get_any_char() . $search . $this->db->get_any_char()) . '
+                            ORDER BY username_clean ' . $this->db->sql_like_expression($search . $this->db->get_any_char()) . ' DESC, username DESC';
                 $result = $this->db->sql_query($query);
                 $default_avatar_url = $this->phpbb_root_path . 'styles/' . $this->user->style['style_path'] . '/theme/images/no_avatar.gif';
                 if (!file_exists($default_avatar_url))
@@ -90,8 +90,37 @@ class controller
                     {
                         $avatar_image = '<img src="' . $default_avatar_url . '"/>';
                     }
-                    // Add the user to the user list
-                    $suggestions['users'][$count++] = array('username' => $user['username'], 'user' => get_username_string('no_profile', $user['user_id'], $user['username'], $user['user_colour']), 'avatar' => $avatar_image);
+                    // Add the user to the suggestion list
+                    $suggestions['users'][$count++] = array(
+                        'username' => $user['username'],
+                        'user'     => get_username_string('no_profile', $user['user_id'], $user['username'], $user['user_colour']),
+                        'avatar'   => $avatar_image,
+                    );
+                    if ($count == $this->config['pcgf_namesuggestions_suggestion_count'])
+                    {
+                        break;
+                    }
+                }
+                $this->db->sql_freeresult($result);
+                $count = 0;
+                $query = 'SELECT *
+                            FROM ' . GROUPS_TABLE . '
+                            WHERE LOWER(group_name) ' . $this->db->sql_like_expression($this->db->get_any_char() . $search . $this->db->get_any_char());
+                $result = $this->db->sql_query($query);
+                while ($group = $this->db->sql_fetchrow($result))
+                {
+                    $avatar_image = phpbb_get_group_avatar($group);
+                    if ($avatar_image == '')
+                    {
+                        $avatar_image = '<img src="' . $default_avatar_url . '"/>';
+                    }
+                    $group_name = $group['group_type'] == GROUP_SPECIAL ? $this->user->lang('G_' . $group['group_name']) : $group['group_name'];
+                    // Add the group to the suggestion list
+                    $suggestions['groups'][$count++] = array(
+                        'groupname' => $group_name,
+                        'group'     => '<span' . ($group['group_colour'] != '' ? ' style="color: #' . $group['group_colour'] . '"' : '') . '>' . $group_name . '</span>',
+                        'avatar'    => $avatar_image,
+                    );
                     if ($count == $this->config['pcgf_namesuggestions_suggestion_count'])
                     {
                         break;
