@@ -6,6 +6,7 @@ services:
             - '@config'
             - '@controller.helper'
             - '@template'
+            - '%core.table_prefix%'
         tags:
             - { name: event.listener }
     pcgf.namesuggestions.controller:
@@ -16,3 +17,4 @@ services:
             - '@user'
             - '@config'
             - '%core.root_path%'
+            - '%core.table_prefix%'

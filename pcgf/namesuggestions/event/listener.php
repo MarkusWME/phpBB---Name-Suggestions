@@ -30,14 +30,38 @@ class listener implements EventSubscriberInterface
     /** @var template $template Template object */
     protected $template;
 
-    public function __construct(factory $db, config $config, helper $helper, template $template)
+    /** @var string $table_prefix The phpBB table prefix */
+    protected $table_prefix;
+
+    /**
+     * Listener constructor
+     *
+     * @access public
+     * @since  1.0.0
+     *
+     * @param factory  $db
+     * @param config   $config
+     * @param helper   $helper
+     * @param template $template
+     * @param string   $table_prefix
+     */
+    public function __construct(factory $db, config $config, helper $helper, template $template, $table_prefix)
     {
         $this->db = $db;
         $this->config = $config;
         $this->helper = $helper;
         $this->template = $template;
+        $this->table_prefix = $table_prefix;
     }
 
+    /**
+     * Function that returns the subscribed events
+     *
+     * @access public
+     * @since  1.0.0
+     *
+     * @return array Array with the subscribed events
+     */
     static public function getSubscribedEvents()
     {
         global $phpbb_container, $table_prefix;
@@ -55,12 +79,20 @@ class listener implements EventSubscriberInterface
         return $events;
     }
 
+    /**
+     * Function that adds the name suggestions to the template
+     *
+     * @access public
+     * @since  1.0.0
+     *
+     * @param array  $event      Event data
+     * @param string $event_name The name of the event
+     */
     public function add_name_suggestions($event, $event_name)
     {
-        global $table_prefix;
         $selectors = '';
         $query = 'SELECT input_selector
-                    FROM ' . $table_prefix . release_1_0_0::NAMESUGGESTIONS_EVENTS_TABLE . '
+                    FROM ' . $this->table_prefix . release_1_0_0::NAMESUGGESTIONS_EVENTS_TABLE . '
                     WHERE event_name = "' . $this->db->sql_escape($event_name) . '"';
         $result = $this->db->sql_query($query);
         while ($event_data = $this->db->sql_fetchrow($result))
