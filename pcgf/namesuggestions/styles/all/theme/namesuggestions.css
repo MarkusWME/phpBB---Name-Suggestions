@@ -24,8 +24,24 @@
     user-select: none;
 }
 
+#pcgf-namesuggestion-list > ul > li.title {
+    background-color: rgb(141, 141, 141);
+    color: rgb(255, 255, 255);
+    cursor: text;
+    padding: 2px;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
 #pcgf-namesuggestion-list > ul > li.selected {
     background-color: rgb(180, 180, 180) !important;
+}
+
+#pcgf-namesuggestion-list > ul > li.title.selected {
+    background-color: rgb(141, 141, 141) !important;
 }
 
 #pcgf-namesuggestion-list > ul > li > img {

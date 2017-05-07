@@ -49,12 +49,16 @@ $(window).resize(function() {
 
 function nameSuggestionClick() {
     // Refresh the list when something has been clicked inside the textarea
-    pcgfCurrentElement.trigger('keyup');
+    if (pcgfCurrentElement !== null) {
+        pcgfCurrentElement.trigger('keyup');
+    }
 }
 
 function nameSuggestionFocusIn() {
     // Show the suggestion list when the textarea get's focused
-    pcgfCurrentElement.trigger('keyup');
+    if (pcgfCurrentElement !== null) {
+        pcgfCurrentElement.trigger('keyup');
+    }
 }
 
 function nameSuggestionFocusOut(e) {
@@ -92,6 +96,9 @@ function nameSuggestionKeyDown(e) {
                     pcgfSuggestionList.find('ul > li:nth-child(' + pcgfLastSelectedIndex + ')').addClass('selected');
                 }
             }
+            if (pcgfSuggestionList.find('ul > li:nth-child(' + pcgfLastSelectedIndex + ')').hasClass('title')) {
+                pcgfCurrentElement.trigger(e);
+            }
         } else if (e.which === 40) {
             // Down arrow selects the next entry of the list
             if (pcgfKeyCatched % 3 === 1) {
@@ -106,6 +113,9 @@ function nameSuggestionKeyDown(e) {
                     pcgfLastSelectedIndex++;
                     pcgfSuggestionList.find('ul > li:nth-child(' + pcgfLastSelectedIndex + ')').addClass('selected');
                 }
+            }
+            if (pcgfSuggestionList.find('ul > li:nth-child(' + pcgfLastSelectedIndex + ')').hasClass('title')) {
+                pcgfCurrentElement.trigger(e);
             }
         } else {
             pcgfKeyCatched = 0;
@@ -171,17 +181,37 @@ function nameSuggestionKeyUp(e) {
                                 }
                             }
                         }
+                        if (result['groups'] !== undefined) {
+                            for (i = 0; i < result['groups'].length; i++) {
+                                // If name isn't already entered then show it
+                                found = false;
+                                for (j = 0; j < names.length; j++) {
+                                    if (result['groups'][i].username === names[j]) {
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                if (!found) {
+                                    pcgfResultCount++;
+                                    groupSuggestions += '<li>' + result['groups'][i].avatar + result['groups'][i].group + '<input type="hidden" class="pcgf-name-suggestion" value="' + result['groups'][i].groupname + '"/></li>';
+                                }
+                            }
+                        }
                     }
                     if (pcgfResultCount > 0) {
                         // Show the result list and refresh it's position
                         var suggestions = '';
-                        if (userSuggestions !== '') {
-                            suggestions = (result['groups'] === undefined ? '' : '<p>' + pcgfNameSuggestionLanguageUsers + '</p>') + '<ul>' + userSuggestions + '</ul>';
+                        if (result['groups'] !== undefined && userSuggestions !== '') {
+                            suggestions += '<li class="title">' + pcgfNameSuggestionLanguageUsers + '</li>';
+                            pcgfResultCount++;
                         }
-                        if (groupSuggestions !== '') {
-                            suggestions = (result['users'] === undefined ? '' : '<p>' + pcgfNameSuggestionLanguageGroups + '</p>') + '<ul>' + groupSuggestions + '</ul>';
+                        suggestions += userSuggestions;
+                        if (result['users'] !== undefined && groupSuggestions !== '') {
+                            suggestions += '<li class="title">' + pcgfNameSuggestionLanguageGroups + '</li>';
+                            pcgfResultCount++;
                         }
-                        pcgfSuggestionList.html(suggestions);
+                        suggestions += groupSuggestions;
+                        pcgfSuggestionList.html('<ul>' + suggestions + '</ul>');
                         pcgfSuggestionList.find('img').each(function() {
                             $(this).css({
                                 width: pcgfNameSuggestionImageSize + 'px',
@@ -221,9 +251,12 @@ pcgfSuggestionList.on('mouseleave', function() {
 pcgfSuggestionList.on('click', function() {
     // Select the name
     if (pcgfLastSelectedIndex > 0) {
-        pcgfLastSearchValue = '';
-        setSuggestionName(pcgfSuggestionList.find('ul > li:nth-child(' + pcgfLastSelectedIndex + ')').find('.pcgf-name-suggestion').val());
-        pcgfCurrentElement.focus();
+        var suggestionName = pcgfSuggestionList.find('ul > li:nth-child(' + pcgfLastSelectedIndex + ')').find('.pcgf-name-suggestion').val();
+        if (suggestionName !== undefined) {
+            pcgfLastSearchValue = '';
+            setSuggestionName(suggestionName);
+            pcgfCurrentElement.focus();
+        }
     }
 });
 
