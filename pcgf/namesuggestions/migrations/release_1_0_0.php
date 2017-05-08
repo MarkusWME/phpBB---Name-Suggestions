@@ -144,6 +144,22 @@ class release_1_0_0 extends migration
                 'suggest_groups' => 0,
                 'enabled'        => 1,
             ),
+            array(
+                'event_name'     => 'core.adm_page_header_after',
+                'input_selector' => '#username',
+                'description'    => 'ACP username suggestions',
+                'suggest_users'  => 1,
+                'suggest_groups' => 0,
+                'enabled'        => 1,
+            ),
+            array(
+                'event_name'     => 'core.ucp_display_module_before',
+                'input_selector' => '#add',
+                'description'    => 'Add friends/foes',
+                'suggest_users'  => 1,
+                'suggest_groups' => 0,
+                'enabled'        => 1,
+            ),
         );
         $db->sql_multi_insert($table_prefix . self::NAMESUGGESTIONS_EVENTS_TABLE, $insert_data);
     }
