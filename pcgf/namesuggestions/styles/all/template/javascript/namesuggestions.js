@@ -16,7 +16,7 @@ function hideSuggestions() {
 function setSuggestionPosition() {
     if (pcgfResultCount > 0) {
         // Position the suggestion list under the current line of the user list
-        var listPosition = pcgfCurrentElement.position();
+        var listPosition = pcgfCurrentElement.offset();
         var currentLine = pcgfCurrentElement.val();
         currentLine = currentLine.substr(0, pcgfCurrentElement.prop('selectionStart')).split('\n').length;
         pcgfSuggestionList.css({
@@ -40,6 +40,8 @@ function setSuggestionName(name) {
     pcgfCurrentElement.prop('selectionStart', startIndex + name.length + 1);
     pcgfCurrentElement.prop('selectionEnd', startIndex + name.length + 1);
     hideSuggestions();
+    pcgfCurrentElement.focus();
+    pcgfCurrentElement = null;
 }
 
 $(window).resize(function() {
@@ -255,7 +257,6 @@ pcgfSuggestionList.on('click', function() {
         if (suggestionName !== undefined) {
             pcgfLastSearchValue = '';
             setSuggestionName(suggestionName);
-            pcgfCurrentElement.focus();
         }
     }
 });

@@ -81,7 +81,11 @@ class controller
                 $default_avatar_url = $this->phpbb_root_path . 'styles/' . $this->user->style['style_path'] . '/theme/images/no_avatar.gif';
                 if (!file_exists($default_avatar_url))
                 {
-                    $default_avatar_url = $this->phpbb_root_path . 'ext/pcgf/namesuggestions/styles/all/theme/images/no-avatar.gif';
+                    $default_avatar_url = $this->phpbb_root_path . (strpos($event, 'core.adm') === 0 ? '../' : '') . 'ext/pcgf/namesuggestions/styles/all/theme/images/no-avatar.gif';
+                }
+                else if (strpos($event, 'core.adm') === 0)
+                {
+                    $default_avatar_url = $this->phpbb_root_path . '../styles/' . $this->user->style['style_path'] . '/theme/images/no_avatar.gif';
                 }
                 if (!defined('PHPBB_USE_BOARD_URL_PATH'))
                 {
