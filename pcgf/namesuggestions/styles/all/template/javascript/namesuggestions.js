@@ -157,7 +157,7 @@ function nameSuggestionKeyUp(e) {
         $.ajax({
             url: pcgfNameSuggestionURL, type: 'POST', data: {search: searchValue, event: pcgfNameSuggestionEvent, selector: pcgfCurrentElement.attr('data-selector')}, success: function(result) {
                 if (searchValue === pcgfLastSearchValue) {
-                    var names = pcgfSuggestionList.val().split('\n');
+                    var names = pcgfCurrentElement.val().split('\n');
                     var userSuggestions = '';
                     var groupSuggestions = '';
                     if (result.length === 0) {
@@ -188,7 +188,7 @@ function nameSuggestionKeyUp(e) {
                                 // If name isn't already entered then show it
                                 found = false;
                                 for (j = 0; j < names.length; j++) {
-                                    if (result['groups'][i].username === names[j]) {
+                                    if (result['groups'][i].groupname === names[j]) {
                                         found = true;
                                         break;
                                     }
