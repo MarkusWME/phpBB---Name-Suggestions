@@ -112,4 +112,3 @@ class listener implements EventSubscriberInterface
         $this->db->sql_freeresult($result);
     }
 }
-
