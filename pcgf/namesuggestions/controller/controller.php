@@ -92,9 +92,9 @@ class controller
                     define('PHPBB_USE_BOARD_URL_PATH', true);
                 }
                 $query = 'SELECT suggest_users, suggest_groups
-                            FROM ' . $this->table_prefix . release_1_0_0::NAMESUGGESTIONS_EVENTS_TABLE . '
-                            WHERE event_name = "' . $event . '"
-                                AND input_selector = "' . $selector . '"';
+                            FROM ' . $this->table_prefix . release_1_0_0::NAMESUGGESTIONS_EVENTS_TABLE . "
+                            WHERE event_name = '" . $event . "'
+                                AND input_selector = '" . $selector . "'";
                 $result = $this->db->sql_query($query);
                 $suggest = $this->db->sql_fetchrow($result);
                 $this->db->sql_freeresult($result);

@@ -92,8 +92,8 @@ class listener implements EventSubscriberInterface
     {
         $selectors = '';
         $query = 'SELECT input_selector
-                    FROM ' . $this->table_prefix . release_1_0_0::NAMESUGGESTIONS_EVENTS_TABLE . '
-                    WHERE event_name = "' . $this->db->sql_escape($event_name) . '"';
+                    FROM ' . $this->table_prefix . release_1_0_0::NAMESUGGESTIONS_EVENTS_TABLE . "
+                    WHERE event_name = '" . $this->db->sql_escape($event_name) . "'";
         $result = $this->db->sql_query($query);
         while ($event_data = $this->db->sql_fetchrow($result))
         {
@@ -105,8 +105,8 @@ class listener implements EventSubscriberInterface
                 'NAME_SUGGESTIONS'                => true,
                 'PCGF_NAME_SUGGESTION_URL'        => $this->helper->route('pcgf_namesuggestions_controller'),
                 'PCGF_NAME_SUGGESTION_IMAGE_SIZE' => $this->config['pcgf_namesuggestions_avatar_image_size'],
-                'PCGF_NAME_SUGGESTION_EVENT'      => $event_name,
-                'PCGF_NAME_SUGGESTION_SELECTORS'  => $selectors,
+                'PCGF_NAME_SUGGESTION_EVENT'      => addslashes($event_name),
+                'PCGF_NAME_SUGGESTION_SELECTORS'  => addslashes($selectors),
             ));
         }
         $this->db->sql_freeresult($result);

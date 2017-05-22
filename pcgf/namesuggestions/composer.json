@@ -3,8 +3,8 @@
     "type": "phpbb-extension",
     "description": "An extension that suggests usernames and group names on pages where users or groups can be selected",
     "homepage": "https://github.com/MarkusWME/phpBB---Name-Suggestions",
-    "version": "1.0.0",
-    "time": "2017-05-09",
+    "version": "1.0.1",
+    "time": "2017-05-22",
     "keywords": ["user", "group", "username", "group name", "suggestion"],
     "license": "GPL-2.0",
     "authors": [

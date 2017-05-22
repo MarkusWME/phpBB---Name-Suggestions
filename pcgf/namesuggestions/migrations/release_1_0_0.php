@@ -134,7 +134,6 @@ class release_1_0_0 extends migration
      */
     public function insert_default_events()
     {
-        global $db, $table_prefix;
         $insert_data = array(
             array(
                 'event_name'     => 'core.ucp_pm_compose_modify_data',
@@ -161,6 +160,6 @@ class release_1_0_0 extends migration
                 'enabled'        => 1,
             ),
         );
-        $db->sql_multi_insert($table_prefix . self::NAMESUGGESTIONS_EVENTS_TABLE, $insert_data);
+        $this->db->sql_multi_insert($this->table_prefix . self::NAMESUGGESTIONS_EVENTS_TABLE, $insert_data);
     }
 }
