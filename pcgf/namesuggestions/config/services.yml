@@ -1,3 +1,6 @@
+imports:
+    - { resource: parameters.yml }
+
 services:
     pcgf.namesuggestions.listener:
         class: pcgf\namesuggestions\event\listener
@@ -7,6 +10,7 @@ services:
             - '@controller.helper'
             - '@template'
             - '%core.table_prefix%'
+            - '%tables.pcgf.namesuggestions.events%'
         tags:
             - { name: event.listener }
     pcgf.namesuggestions.controller:
@@ -18,3 +22,4 @@ services:
             - '@config'
             - '%core.root_path%'
             - '%core.table_prefix%'
+            - '%tables.pcgf.namesuggestions.events%'

@@ -8,9 +8,7 @@
 
 namespace pcgf\namesuggestions\acp;
 
-use pcgf\namesuggestions\migrations\release_1_0_0;
-
-/** @version 1.0.0 */
+/** @version 1.0.1 */
 class namesuggestions_module
 {
     /** @var string $page_title Title of the page */
@@ -33,7 +31,8 @@ class namesuggestions_module
      */
     public function main($id, $mode)
     {
-        global $config, $db, $phpbb_admin_path, $phpEx, $request, $table_prefix, $template, $user;
+        global $config, $db, $phpbb_admin_path, $phpbb_container, $phpEx, $request, $template, $user;
+        $events_table = $phpbb_container->getParameter('tables.pcgf.namesuggestions.events');
         switch ($mode)
         {
             case 'add':
@@ -64,12 +63,12 @@ class namesuggestions_module
                     if ($event_name == '')
                     {
                         // Insert a new event
-                        $query = 'INSERT INTO ' . $table_prefix . release_1_0_0::NAMESUGGESTIONS_EVENTS_TABLE . ' ' . $db->sql_build_array('INSERT', $insert_data);
+                        $query = 'INSERT INTO ' . $events_table . ' ' . $db->sql_build_array('INSERT', $insert_data);
                     }
                     else
                     {
                         // Update an existing event
-                        $query = 'UPDATE ' . $table_prefix . release_1_0_0::NAMESUGGESTIONS_EVENTS_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $insert_data) . ' WHERE event_name = "' . $db->sql_escape($event_name) . '"';
+                        $query = 'UPDATE ' . $events_table . ' SET ' . $db->sql_build_array('UPDATE', $insert_data) . ' WHERE event_name = "' . $db->sql_escape($event_name) . '"';
                     }
                     $db->sql_query($query);
                     if ($db->sql_affectedrows() == 1)
@@ -95,7 +94,7 @@ class namesuggestions_module
                 if ($event_name != '')
                 {
                     $query = 'SELECT *
-                            FROM ' . $table_prefix . release_1_0_0::NAMESUGGESTIONS_EVENTS_TABLE . "
+                            FROM ' . $events_table . "
                             WHERE event_name = '" . $db->sql_escape($event_name) . "'";
                     $result = $db->sql_query($query);
                     $event = $db->sql_fetchrow($result);
@@ -136,7 +135,7 @@ class namesuggestions_module
                             // Delete the selected event when deletion has been confirmed
                             if ($request->variable('submit', $user->lang('NO')) == $user->lang('YES'))
                             {
-                                $query = 'DELETE FROM ' . $table_prefix . release_1_0_0::NAMESUGGESTIONS_EVENTS_TABLE . " WHERE event_name = '" . $db->sql_escape($request->variable('event', 'NULL')) . "'";
+                                $query = 'DELETE FROM ' . $events_table . " WHERE event_name = '" . $db->sql_escape($request->variable('event', 'NULL')) . "'";
                                 $db->sql_query($query);
                                 if ($db->sql_affectedrows() != 1)
                                 {
@@ -175,7 +174,7 @@ class namesuggestions_module
                 // Load defined events
                 $events_defined = false;
                 $query = 'SELECT event_name, description, enabled
-                            FROM ' . $table_prefix . release_1_0_0::NAMESUGGESTIONS_EVENTS_TABLE;
+                            FROM ' . $events_table;
                 $result = $db->sql_query($query);
                 while ($event = $db->sql_fetchrow($result))
                 {

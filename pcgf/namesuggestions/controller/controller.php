@@ -8,14 +8,13 @@
 
 namespace pcgf\namesuggestions\controller;
 
-use pcgf\namesuggestions\migrations\release_1_0_0;
 use phpbb\config\config;
 use phpbb\db\driver\factory;
 use phpbb\json_response;
 use phpbb\request\request;
 use phpbb\user;
 
-/** @version 1.0.0 */
+/** @version 1.0.1 */
 class controller
 {
     /** @var request $request Request object */
@@ -36,6 +35,9 @@ class controller
     /** @var string $table_prefix The phpBB table prefix */
     protected $table_prefix;
 
+    /** @var string $events_table Name Suggestions events table name */
+    protected $events_table;
+
     /**
      * Constructor
      *
@@ -48,8 +50,9 @@ class controller
      * @param config  $config          Configuration object
      * @param string  $phpbb_root_path The forum root path
      * @param string  $table_prefix    The phpBB table prefix
+     * @param string  $events_table    Name Suggestions events table name
      */
-    public function __construct(request $request, factory $db, user $user, config $config, $phpbb_root_path, $table_prefix)
+    public function __construct(request $request, factory $db, user $user, config $config, $phpbb_root_path, $table_prefix, $events_table)
     {
         $this->request = $request;
         $this->db = $db;
@@ -57,6 +60,7 @@ class controller
         $this->config = $config;
         $this->phpbb_root_path = $phpbb_root_path;
         $this->table_prefix = $table_prefix;
+        $this->events_table = $events_table;
     }
 
     /**
@@ -92,7 +96,7 @@ class controller
                     define('PHPBB_USE_BOARD_URL_PATH', true);
                 }
                 $query = 'SELECT suggest_users, suggest_groups
-                            FROM ' . $this->table_prefix . release_1_0_0::NAMESUGGESTIONS_EVENTS_TABLE . "
+                            FROM ' . $this->events_table . "
                             WHERE event_name = '" . $event . "'
                                 AND input_selector = '" . $selector . "'";
                 $result = $this->db->sql_query($query);
