@@ -15,6 +15,7 @@ class release_1_0_0 extends migration
 {
     const NAMESUGGESTIONS_EVENTS_TABLE = 'namesuggestions_events';
 
+
     /**
      * Function that checks if the extension has been effectively installed
      *
