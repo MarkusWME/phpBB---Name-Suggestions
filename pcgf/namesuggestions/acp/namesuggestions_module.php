@@ -32,7 +32,11 @@ class namesuggestions_module
     public function main($id, $mode)
     {
         global $config, $db, $phpbb_admin_path, $phpbb_container, $phpEx, $request, $template, $user;
+        $cache = $phpbb_container->get('cache');
         $events_table = $phpbb_container->getParameter('tables.pcgf.namesuggestions.events');
+        $cached_query = 'SELECT event_name
+                            FROM ' . $events_table . '
+                            WHERE enabled = 1';
         switch ($mode)
         {
             case 'add':
@@ -73,6 +77,12 @@ class namesuggestions_module
                     $db->sql_query($query);
                     if ($db->sql_affectedrows() == 1)
                     {
+                        // Clear cached events so that changes will be used instantly
+                        $cached_query_id = $cache->sql_load($cached_query);
+                        if ($cache->sql_exists($cached_query_id))
+                        {
+                            $cache->destroy('sql', $events_table);
+                        }
                         if ($event_name == '')
                         {
                             // Show add success message
@@ -137,7 +147,16 @@ class namesuggestions_module
                             {
                                 $query = 'DELETE FROM ' . $events_table . " WHERE event_name = '" . $db->sql_escape($request->variable('event', 'NULL')) . "'";
                                 $db->sql_query($query);
-                                if ($db->sql_affectedrows() != 1)
+                                if ($db->sql_affectedrows() == 1)
+                                {
+                                    // Clear cached events so that changes will be used instantly
+                                    $cached_query_id = $cache->sql_load($cached_query);
+                                    if ($cache->sql_exists($cached_query_id))
+                                    {
+                                        $cache->destroy('sql', $events_table);
+                                    }
+                                }
+                                else
                                 {
                                     trigger_error($user->lang('ACP_PCGF_NAMESUGGESTIONS_ACTION_FAILED') . adm_back_link($this->u_action), E_USER_WARNING);
                                 }

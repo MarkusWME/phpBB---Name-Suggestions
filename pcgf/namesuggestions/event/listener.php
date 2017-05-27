@@ -75,7 +75,8 @@ class listener implements EventSubscriberInterface
         $query = 'SELECT event_name
                     FROM ' . $events_table . '
                     WHERE enabled = 1';
-        $result = $db->sql_query($query);
+        // Cache the result for 365 days
+        $result = $db->sql_query($query, 31536000);
         while ($event = $db->sql_fetchrow($result))
         {
             $events[$event['event_name']] = 'add_name_suggestions';
