@@ -48,6 +48,6 @@ $lang = array_merge($lang, array(
     'ACP_PCGF_NAMESUGGESTIONS_ACTIONS'                   => 'Actions',
     'ACP_PCGF_NAMESUGGESTIONS_ACTION_FAILED'             => 'The action has failed! Please try again later.',
     'ACP_PCGF_NAMESUGGESTIONS_CONFIRM_DELETION'          => 'Do you really want to delete the event?',
-    'ACP_PCGF_NAMESUGGESTIONS_CONFIRM_DELETION_TEXT'     => 'You are going to delete the event "%s". Do you want to continue?',
+    'ACP_PCGF_NAMESUGGESTIONS_CONFIRM_DELETION_TEXT'     => 'You are going to delete the event “%s”. Do you want to continue?',
     'ACP_PCGF_NAMESUGGESTIONS_BACK_TO_EDIT'              => '&laquo; Back to management section',
 ));
